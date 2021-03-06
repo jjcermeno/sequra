@@ -1,0 +1,51 @@
+version: "3"
+services:
+
+  db:
+    image: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  redis:
+    image: 'redis:alpine'
+    command: redis-server
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis:/data'
+
+  sidekiq:
+    depends_on:
+      - 'db'
+      - 'redis'
+    build: ./sequra_api
+    command: bundle exec sidekiq
+    volumes:
+      - '.:/project'
+      - '/project/tmp'
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+
+  sequra_api:
+    build: ./sequra_api
+    command: bash -c "rm -f /sequra_api/tmp/pids/server.pid && foreman start -f /sequra_api/Procfile"
+    environment:
+      - PORT=3000
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+    volumes:
+      - ./sequra_api:/sequra_api
+      - rails_log:/sequra_api/log
+    ports:
+      - "3030:3000" # use port that you want to in your local instead of 3091
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  db:
+  rails_log:
+  redis:

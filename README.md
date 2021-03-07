@@ -1,4 +1,4 @@
-Sequra
+This is an exercise according to the problem declared -> [https://gist.github.com/francesc/33239117e4986459a9ff9f6ea64b4e80](https://gist.github.com/francesc/33239117e4986459a9ff9f6ea64b4e80)
 
 # Solution design
 
@@ -6,11 +6,11 @@ Sequra
 
 After reading the proposed exercise I usually start by writing/drawing/mind mapping what I think are the relevant elements involved in the problem, so, I have identified the following facts:
 
-- we need to persist data about merchants, orders and clients, this is calling for some organized storing mechanism like a database (I would choose PostgreSQL but SQLite for the exercise will do it too)
+- we need to persist data about merchants, orders and shoppers, this is calling for some organized storing mechanism like a database (I would choose PostgreSQL but SQLite for the exercise will do it too)
 - we need to perform some calculation for each order so we can know what is the disbursement based on the fee algorithm
 - we would like to use any kind of background job to regularly filter orders and extract our fee per merchant for such period (weekly, on Monday)
 - we need to provide an API endpoint to get disbursements for a given week per merchant
-- we need data about merchants, clients and orders, however, it's not specified how they are reaching our system
+- we need data about merchants, shoppers and orders, however, it's not specified how they are reaching our system
 - we are dealing with `money`
 
 Exploring the datasets I think I see that some relevant details are:
@@ -42,13 +42,15 @@ I think that one of the best ways to use Rails apart from well know resource ori
 - id
 - merchant_id (that's the id coming from the external API, file or whatever)
 - name
+- email
+- cif
 
 **`Order`**
 
 - id
 - order_id (that's the id coming from the external API, file or whatever)
 - merchant (will point to `Merchant` model)
-- client (will point to `Client` model)
+- shopper (will point to `Shopper` model)
 - disbursement (will point to `Disbursement` model using merchant and time coordinates)
 - amount
 - fee
@@ -59,10 +61,10 @@ I think that one of the best ways to use Rails apart from well know resource ori
 - week (week number of completed_at when it's present)
 - year (year number of completed_at when it's present)
 
-**`Client`**
+**`Shopper`**
 
 - id
-- client_id (that's the id coming from the external API, file or whatever)
+- shopper_id (that's the id coming from the external API, file or whatever)
 - name
 - email
 
@@ -163,7 +165,7 @@ I will create repositories for every entity we need to get, save, update or dele
 
 - Merchants
 - Orders
-- Clients
+- Shoppers
 - Disbursements
 
 **Use cases**
@@ -194,25 +196,25 @@ LoadOrders
 For each software element I will write first some tests. For example:
 
 - for services
-  
+
   - CalculateFee, I will test for each range of the algorithm
-  
+
   - GetWeekAndYear, I will test calculation for a given date and other with no given date
 
 - for use cases
-  
+
   - GetDisbursements:
-    
+
     - get list of specific week and merchant (happy path)
-    
+
     - get list of specific week and no merchant
-    
+
     - get list with no date and specific merchant
-    
+
     - get list with no date and no merchant
-  
+
   - ResetDisbursements, set Disbursement table to zero for each merchant.
-  
+
   - LoadOrders, this one will be called by the background job scheduled to run every Monday
 
 # Using the solution
@@ -226,7 +228,7 @@ The first procedure is to install and deploy so:
 - open a terminal and go to folder `sequra`
 
 - using the terminal type:
-  
+
     start the docker service (in Linux) if it's not started
 
 ```bash

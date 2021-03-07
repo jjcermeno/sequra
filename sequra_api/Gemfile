@@ -28,6 +28,7 @@ gem 'sidekiq'
 gem 'oj'
 gem 'json'
 gem 'caze'
+gem 'money'
 
 
 group :development, :test do

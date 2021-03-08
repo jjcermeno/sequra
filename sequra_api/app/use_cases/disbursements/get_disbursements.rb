@@ -4,6 +4,7 @@ module Disbursements
 
     attr_reader :data_result
     attr_accessor :week, :year, :merchant
+
     export :call, as: :get_disbursements
 
     def initialize(params)

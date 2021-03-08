@@ -12,8 +12,8 @@ rerun.txt
 pickle-email-*.html
 
 # Ignore all logfiles and tempfiles.
-/sequra_api/log/*
-/sequra_api/tmp/*
+sequra_api/log/*
+sequra_api/tmp/*
 !/log/.keep
 !/tmp/.keep
 

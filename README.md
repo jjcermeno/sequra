@@ -196,25 +196,25 @@ LoadOrders
 For each software element I will write first some tests. For example:
 
 - for services
-
+  
   - CalculateFee, I will test for each range of the algorithm
-
+  
   - GetWeekAndYear, I will test calculation for a given date and other with no given date
 
 - for use cases
-
+  
   - GetDisbursements:
-
+    
     - get list of specific week and merchant (happy path)
-
+    
     - get list of specific week and no merchant
-
+    
     - get list with no date and specific merchant
-
+    
     - get list with no date and no merchant
-
+  
   - ResetDisbursements, set Disbursement table to zero for each merchant.
-
+  
   - LoadOrders, this one will be called by the background job scheduled to run every Monday
 
 # Using the solution
@@ -228,7 +228,7 @@ The first procedure is to install and deploy so:
 - open a terminal and go to folder `sequra`
 
 - using the terminal type:
-
+  
     start the docker service (in Linux) if it's not started
 
 ```bash
@@ -279,7 +279,7 @@ Those are the exposed ports:
 - 5432 for PostgreSQL
 - 6379 for Redis
 
-So, when servers are running just to [http://localhost:3030](http://localhost:3030) in any REST API Client and enjoy the solution. That's all.
+So, when servers are running just to [http://localhost:3030](http://localhost:3030) in any REST API Client and enjoy the solution. That's all. However, I didn't finishing loading orders and generating `Disbursements` table.
 
 ## What is left behind
 
@@ -290,3 +290,7 @@ I had to take some decisions about what not to cover and what is not included. I
 + any auditing, exporting to external services like spreadsheets, Airtable-like services or any other dashboard systems
 
 I decided to make queries as simple as possible and save in database all possible data so queries are debugable, easy and quick. Of course, using advanced queries there is no need to use a table like `Disbursements` but it makes the system less maintenable.
+
+So, for now, solution is still to be developed. And due to lack of time, running, having preassure and the fact that's been more than a year I do not touch Ruby professionally (and in my spare time) these exercise is not Test driven, tests are there, but done after creating some code because the important use cases are not done yet. Usually, when I
+
+perform TDD, that is almost always, I write tests for the use case, it will fail most of the time, when all elements are in place, and then I am writing tests (unit) for the smaller elements that the use case uses. However, due to the 3 hour limit, I rush to study the problem, think on a design and show some code. Thank you for the effort trying to understand it.

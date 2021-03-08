@@ -28,7 +28,7 @@ gem 'sidekiq'
 gem 'oj'
 gem 'json'
 gem 'caze'
-gem 'money'
+gem 'money-rails', '~>1.12'
 
 
 group :development, :test do
